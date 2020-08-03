@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import {  selectors as authSelectors} from "./services/auth";
 import config from "./config";
 
-export const FetchProvider = (props) => {
+export default function FetchProvider(props) {
   const accessToken = useSelector(authSelectors.getAccessToken);
   
   const fetchOptions = {

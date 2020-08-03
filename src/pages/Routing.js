@@ -23,10 +23,10 @@ function AppRouting() {
   return (
     <Switch>
       <Sidebar>
-        <Route path="/">
+        <Route exact path="/">
           <DashboardPage />
         </Route>
-        <Route path="/schedule">
+        <Route exact path="/schedule">
           <SchedulePage />
         </Route>
       </Sidebar>

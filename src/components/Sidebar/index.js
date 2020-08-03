@@ -1,15 +1,17 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import TuneIcon from '@material-ui/icons/Tune';
 import {
   AppBar,
   Drawer,
@@ -23,10 +25,14 @@ import {
   ListItem,
   Divider,
   useTheme,
-  makeStyles, Button
-} from "@material-ui/core";
-import { useSelector, useDispatch } from "react-redux";
-import {actions as authActions, selectors as authSelectors} from "services/auth";
+  makeStyles,
+  Button,
+  Box,
+} from '@material-ui/core';
+import {
+  actions as authActions,
+  selectors as authSelectors,
+} from 'services/auth';
 
 const drawerWidth = 240;
 
@@ -91,66 +97,90 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
+  },
+  listContainer: {
+    display: 'flex',
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  icon: {},
+  selectedItem: {
+    icon: {
+      color: 'blue'
+    }
+  },
+  settingsContainer: {
+    display: 'flex',
+    height: 'auto',
+    justifyContent: 'center',
+    flexDirection: 'column',
   }
 }));
 
 export default function Sidebar(props) {
-  const {children, title} = props;
+  const { children, title } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const userProfile = useSelector(authSelectors.getUserProfile);
-  
+
   function logout() {
     dispatch(authActions.logout());
   }
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-  
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  
-  const sections = [{text: 'Dashboard', icon: <HomeOutlinedIcon />},
-    {text: 'SchedulePage', icon: <DateRangeIcon />},
-    {text: 'Patients', icon: <PeopleOutlineIcon />},
-    {text: 'Chat', icon: <ChatOutlinedIcon />},
-    {text: 'Alerts', icon: <ErrorOutlineIcon />}];
+
+  const sections = [
+    { text: 'Dashboard', icon: <HomeOutlinedIcon />, link: '/' },
+    { text: 'Schedule', icon: <DateRangeIcon />, link: '/schedule' },
+    { text: 'Patients', icon: <PeopleOutlineIcon />, link: '/patients' },
+    { text: 'Chat', icon: <ChatOutlinedIcon />, link: '/chat' },
+    { text: 'Alerts', icon: <ErrorOutlineIcon />, link: '/alert' },
+  ];
+  const settings = [
+    { text: 'Plans', icon: <FavoriteBorderIcon />, link: '/plans' },
+    { text: 'Settings', icon: <TuneIcon />, link: '/settings' },
+  ];
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
-        position="fixed"
+        position='fixed'
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
       >
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
+            color='inherit'
+            aria-label='open drawer'
             onClick={handleDrawerOpen}
-            edge="start"
+            edge='start'
             className={clsx(classes.menuButton, {
               [classes.hide]: open,
             })}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            {title || "Ignilife"}
+          <Typography variant='h6' className={classes.title}>
+            {title || 'Ignilife'}
           </Typography>
           <Typography>{userProfile.email}</Typography>
-          <Button color="inherit" onClick={logout}>
+          <Button color='inherit' onClick={logout}>
             Logout
           </Button>
         </Toolbar>
       </AppBar>
       <Drawer
-        variant="permanent"
+        variant='permanent'
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open,
@@ -164,18 +194,38 @@ export default function Sidebar(props) {
       >
         <div className={classes.toolbar}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === 'rtl' ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {sections.map(({text, icon}, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <Box className={classes.listContainer}>
+          <List>
+            {sections.map(({ text, icon, link }, index) => (
+              <NavLink key={text} exact to={link} activeClassName={classes.selectedItem}>
+                <ListItem button>
+                  <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              </NavLink>
+            ))}
+          </List>
+        </Box>
+        <Box className={classes.settingsContainer}>
+          <List>
+            {settings.map(({ text, icon, link }, index) => (
+              <NavLink key={text} exact to={link} activeClassName={classes.selectedItem}>
+                <ListItem button>
+                  <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              </NavLink>
+            ))}
+          </List>
+        </Box>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />

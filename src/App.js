@@ -4,7 +4,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import store, { persistor } from "./store";
 import Routing from "./pages/Routing";
-import {FetchProvider} from 'FetchProvider';
+import FetchProvider from 'FetchProvider';
 
 export default function App() {
   return (

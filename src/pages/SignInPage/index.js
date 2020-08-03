@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import {CognitoUser, AuthenticationDetails} from "amazon-cognito-identity-js";
 import * as Yup from 'yup';
 
-import {UserPool} from "UserPool.js";
+import {UserPool} from "userPool.js";
 import { actions as authActions } from "../../services/auth";
 
 const schema = Yup.object().shape({
