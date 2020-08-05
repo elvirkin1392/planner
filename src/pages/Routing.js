@@ -1,18 +1,37 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { CssBaseline, makeStyles } from '@material-ui/core';
 
-import { selectors } from "services/auth";
+import { selectors } from 'services/auth';
 
-import Sidebar from "components/Sidebar";
-import SignInPage from "./SignInPage";
-import DashboardPage from "./DashboardPage";
-import SchedulePage from  './SchedulePage'
+import Sidebar from 'components/Sidebar';
+import SignInPage from './SignInPage';
+import DashboardPage from './DashboardPage';
+import SchedulePage from './SchedulePage';
+import Header from 'components/Header';
 
+export const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  toolbar: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+}));
 function LoginRouting() {
   return (
     <Switch>
-      <Route path="/">
+      <Route path='/'>
         <SignInPage />
       </Route>
     </Switch>
@@ -20,24 +39,32 @@ function LoginRouting() {
 }
 
 function AppRouting() {
+  const classes = useStyles();
+
   return (
-    <Switch>
-      <Sidebar>
-        <Route exact path="/">
-          <DashboardPage />
-        </Route>
-        <Route exact path="/schedule">
-          <SchedulePage />
-        </Route>
-      </Sidebar>
-    </Switch>
+    <div className={classes.root}>
+      <Header />
+      <Sidebar />
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <Switch>
+          <Route exact path='/' component={DashboardPage} />
+          <Route exact path='/schedule' component={SchedulePage} />
+        </Switch>
+      </main>
+    </div>
   );
 }
 
 function Routing() {
   const isAuthenticated = useSelector(selectors.isAuthenticated);
 
-  return <Router>{isAuthenticated ? <AppRouting /> : <LoginRouting />}</Router>;
+  return (
+    <Router>
+      <CssBaseline />
+      {isAuthenticated ? <AppRouting /> : <LoginRouting />}
+    </Router>
+  );
 }
 
 export default Routing;
