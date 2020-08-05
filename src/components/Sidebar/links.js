@@ -7,28 +7,30 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import TuneIcon from '@material-ui/icons/Tune';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, makeStyles, } from '@material-ui/core';
+
+import routeTemplates from 'pages/routeTemplates';
 
 export const useStyles = makeStyles((theme) => ({
   icon: {},
   selectedItem: {
     icon: {
-      color: 'blue'
-    }
+      color: 'blue',
+    },
   },
 }));
 
 export const pages = [
-  { text: 'Dashboard', icon: <HomeOutlinedIcon />, link: '/' },
-  { text: 'Schedule', icon: <DateRangeIcon />, link: '/schedule' },
-  { text: 'Patients', icon: <PeopleOutlineIcon />, link: '/patients' },
-  { text: 'Chat', icon: <ChatOutlinedIcon />, link: '/chat' },
-  { text: 'Alerts', icon: <ErrorOutlineIcon />, link: '/alert' },
+  { text: 'Dashboard', icon: <HomeOutlinedIcon />, link: routeTemplates.dashboard, },
+  { text: 'Schedule', icon: <DateRangeIcon />, link: routeTemplates.schedule },
+  { text: 'Patients', icon: <PeopleOutlineIcon />, link: routeTemplates.patients, },
+  { text: 'Chat', icon: <ChatOutlinedIcon />, link: routeTemplates.chat },
+  { text: 'Alerts', icon: <ErrorOutlineIcon />, link: routeTemplates.alert },
 ];
 
 export const settings = [
-  { text: 'Plans', icon: <FavoriteBorderIcon />, link: '/plans' },
-  { text: 'Settings', icon: <TuneIcon />, link: '/settings' },
+  { text: 'Plans', icon: <FavoriteBorderIcon />, link: routeTemplates.plans },
+  { text: 'Settings', icon: <TuneIcon />, link: routeTemplates.settings },
 ];
 
 export default function Links({ list }) {

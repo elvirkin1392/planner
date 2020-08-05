@@ -2,13 +2,13 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { CssBaseline, makeStyles } from '@material-ui/core';
-
+import loadable from '@loadable/component';
 import { selectors } from 'services/auth';
 
+import routeTemplates from './routeTemplates';
 import Sidebar from 'components/Sidebar';
 import SignInPage from './SignInPage';
 import DashboardPage from './DashboardPage';
-import SchedulePage from './SchedulePage';
 import Header from 'components/Header';
 
 export const useStyles = makeStyles((theme) => ({
@@ -38,6 +38,8 @@ function LoginRouting() {
   );
 }
 
+const SchedulePage = loadable(() => import('./SchedulePage'));
+
 function AppRouting() {
   const classes = useStyles();
 
@@ -48,8 +50,16 @@ function AppRouting() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Switch>
-          <Route exact path='/' component={DashboardPage} />
-          <Route exact path='/schedule' component={SchedulePage} />
+          <Route
+            exact
+            path={routeTemplates.dashboard}
+            component={DashboardPage}
+          />
+          <Route
+            exact
+            path={routeTemplates.schedule}
+            component={SchedulePage}
+          />
         </Switch>
       </main>
     </div>
